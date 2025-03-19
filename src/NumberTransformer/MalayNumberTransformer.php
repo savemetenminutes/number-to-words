@@ -2,11 +2,17 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Legacy\Numbers\Words;
 
 class MalayNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $converter = new Words();
 

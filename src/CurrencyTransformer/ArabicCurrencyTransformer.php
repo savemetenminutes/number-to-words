@@ -10,7 +10,7 @@ use NumberToWords\Language\Arabic\ArabicTripletTransformer;
 use NumberToWords\NumberTransformer\NumberTransformerBuilder;
 use NumberToWords\Service\NumberToTripletsConverter;
 
-class ArabicCurrencyTransformer implements CurrencyTransformer
+class ArabicCurrencyTransformer extends AbstractCurrencyTransformer
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class ArabicCurrencyTransformer implements CurrencyTransformer
      * @throws NumberToWordsException
      * @return string
      */
-    public function toWords(int $amount, string $currency, $options = null): string
+    public function toWords($amount, string $currency, $options = null): string
     {
         $dictionary = new ArabicDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

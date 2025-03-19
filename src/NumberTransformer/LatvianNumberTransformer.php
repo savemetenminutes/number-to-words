@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Latvian\LatvianDictionary;
 use NumberToWords\Language\Latvian\LatvianExponentInflector;
 use NumberToWords\Language\Latvian\LatvianTripletTransformer;
@@ -9,7 +10,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class LatvianNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new LatvianDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

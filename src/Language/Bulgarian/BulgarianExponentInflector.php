@@ -2,21 +2,26 @@
 
 namespace NumberToWords\Language\Bulgarian;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
 use NumberToWords\Grammar\Form;
 use NumberToWords\Language\ExponentInflector;
 
 class BulgarianExponentInflector implements ExponentInflector
 {
+    protected ArithmeticProcessor $arithmeticProcessor;
     protected BulgarianNounGenderInflector $inflector;
 
-    public function __construct(BulgarianNounGenderInflector $inflector)
-    {
+    public function __construct(
+        ArithmeticProcessor $arithmeticProcessor,
+        BulgarianNounGenderInflector $inflector
+    ) {
+        $this->arithmeticProcessor = $arithmeticProcessor;
         $this->inflector = $inflector;
     }
 
-    public function inflectExponent(int $number, int $power): string
+    public function inflectExponent($number, int $power): string
     {
-        if ($power === 0) {
+        if ($this->arithmeticProcessor->comp($power, 0) === 0) {
             return '';
         }
 

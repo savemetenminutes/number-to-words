@@ -2,6 +2,7 @@
 
 namespace NumberToWords\Concerns;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
 use NumberToWords\CurrencyTransformer as Transformer;
 use NumberToWords\Exception\InvalidArgumentException;
 use NumberToWords\CurrencyTransformer\CurrencyTransformer;
@@ -9,6 +10,7 @@ use NumberToWords\Exception\NumberToWordsException;
 
 trait ManagesCurrencyTransformers
 {
+    use ManagesArithmeticProcessors;
     use ManagesLocaleAlias;
 
     private array $currencyTransformers = [
@@ -44,9 +46,12 @@ trait ManagesCurrencyTransformers
     /**
      * @throws InvalidArgumentException
      */
-    public function getCurrencyTransformer(string $language): CurrencyTransformer
-    {
+    public function getCurrencyTransformer(
+        string $language,
+        ArithmeticProcessor $arithmeticProcessor
+    ): CurrencyTransformer {
         $language = $this->resolveAlias($language);
+
         if (!array_key_exists($language, $this->currencyTransformers)) {
             throw new InvalidArgumentException(sprintf(
                 'Currency transformer for "%s" language is not implemented.',
@@ -54,18 +59,28 @@ trait ManagesCurrencyTransformers
             ));
         }
 
-        return new $this->currencyTransformers[$language]();
+        return new $this->currencyTransformers[$language]($arithmeticProcessor);
     }
 
     /**
+     * @param string|float|int $number
+     *
      * @throws NumberToWordsException
      * @throws InvalidArgumentException
      */
-    public static function transformCurrency(string $language, int $number, string $currency): string
-    {
+    public static function transformCurrency(
+        string $language,
+        $number,
+        string $currency,
+        array $options = []
+    ): string {
         $static = new static();
         $language = $static->resolveAlias($language);
+        $arithmeticProcessor = $static->getArithmeticProcessor($number, $options);
 
-        return $static->getCurrencyTransformer($language)->toWords($number, $currency);
+        return
+            $static
+                ->getCurrencyTransformer($language, $arithmeticProcessor)
+                ->toWords($number, $currency);
     }
 }

@@ -12,9 +12,14 @@ use NumberToWords\NumberTransformer\NumberTransformerBuilder;
 use NumberToWords\Service\NumberToTripletsConverter;
 use NumberToWords\TransformerOptions\CurrencyTransformerOptions;
 
-class SerbianCurrencyTransformer implements CurrencyTransformer
+class SerbianCurrencyTransformer extends AbstractCurrencyTransformer
 {
-    public function toWords(int $amount, string $currency, ?CurrencyTransformerOptions $options = null): string
+    /**
+     * @param string|float|int $amount
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($amount, string $currency, ?CurrencyTransformerOptions $options = null): string
     {
         $dictionary = new SerbianDictionary();
         $nounGenderInflector = new SerbianNounGenderInflector();

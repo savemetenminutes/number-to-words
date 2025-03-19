@@ -2,6 +2,9 @@
 
 namespace NumberToWords\CurrencyTransformer;
 
+use NumberToWords\Arithmetic\FloatValueProcessor;
+use NumberToWords\Arithmetic\IntValueProcessor;
+use NumberToWords\Arithmetic\StringValueProcessor;
 use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Grammar\Form;
 use NumberToWords\Language\Bulgarian\BulgarianDictionary;
@@ -13,9 +16,14 @@ use NumberToWords\NumberTransformer\NumberTransformerBuilder;
 use NumberToWords\Service\NumberToTripletsConverter;
 use NumberToWords\TransformerOptions\CurrencyTransformerOptions;
 
-class BulgarianCurrencyTransformer implements CurrencyTransformer
+class BulgarianCurrencyTransformer extends AbstractCurrencyTransformer
 {
-    public function toWords(int $amount, string $currency, ?CurrencyTransformerOptions $options = null): string
+    /**
+     * @param string|float|int $amount
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($amount, string $currency, ?CurrencyTransformerOptions $options = null): string
     {
         $currency = strtoupper($currency);
 
@@ -28,33 +36,35 @@ class BulgarianCurrencyTransformer implements CurrencyTransformer
         $currency = BulgarianDictionary::CURRENCY[$currency];
 
         $dictionary = new BulgarianDictionary();
-        $nounGenderInflector = new BulgarianNounGenderInflector();
-        $numberToTripletsConverter = new NumberToTripletsConverter();
+        $nounGenderInflector = new BulgarianNounGenderInflector($this->arithmeticProcessor);
+        $numberToTripletsConverter = new NumberToTripletsConverter($this->arithmeticProcessor);
         $tripletTransformerWholePart =
-            (new BulgarianTripletTransformer($dictionary))
+            (new BulgarianTripletTransformer($this->arithmeticProcessor, $dictionary))
                 ->setGrammaticalGender(
                     $currency
                         [BulgarianDictionary::CURRENCY_WHOLE]
                         [GrammaticalGenderAwareInterface::GRAMMATICAL_GENDER]
                 );
         $tripletTransformerFractionPart =
-            (new BulgarianTripletTransformer($dictionary))
+            (new BulgarianTripletTransformer($this->arithmeticProcessor, $dictionary))
                 ->setGrammaticalGender(
                     $currency
                         [BulgarianDictionary::CURRENCY_FRACTION]
                         [GrammaticalGenderAwareInterface::GRAMMATICAL_GENDER]
                 );
-        $exponentInflector = new BulgarianExponentInflector($nounGenderInflector);
+        $exponentInflector = new BulgarianExponentInflector(
+            $this->arithmeticProcessor,
+            $nounGenderInflector
+        );
 
-        $decimal = (int) ($amount / 100);
+        $decimal = $this->arithmeticProcessor->floor($this->arithmeticProcessor->div($amount, '100'));
+        $fraction = $this->arithmeticProcessor->getCurrencyFraction($amount);
 
-        $fraction = abs($amount % 100);
-
-        if ($fraction === 0) {
+        if ($this->arithmeticProcessor->comp($fraction, '0') === 0) {
             $fraction = null;
         }
 
-        $numberTransformerWholePart = (new NumberTransformerBuilder())
+        $numberTransformerWholePart = (new NumberTransformerBuilder($this->arithmeticProcessor))
             ->withDictionary($dictionary)
             ->withWordsSeparatedBy($dictionary->getSeparator())
             ->transformNumbersBySplittingIntoPowerAwareTriplets(
@@ -77,7 +87,7 @@ class BulgarianCurrencyTransformer implements CurrencyTransformer
         $words[] = BulgarianDictionary::GRAMMATICAL_CONJUNCTION_AND;
 
         if ($fraction !== null) {
-            $numberTransformerFractionPart = (new NumberTransformerBuilder())
+            $numberTransformerFractionPart = (new NumberTransformerBuilder($this->arithmeticProcessor))
                 ->withDictionary($dictionary)
                 ->withWordsSeparatedBy($dictionary->getSeparator())
                 ->transformNumbersBySplittingIntoPowerAwareTriplets(

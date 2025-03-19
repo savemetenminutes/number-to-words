@@ -21,7 +21,7 @@ class Words
     /**
      * @throws NumberToWordsException
      */
-    public function transformToWords(int $number, string $locale): string
+    public function transformToWords($number, string $locale): string
     {
         $localeClassName = $this->resolveLocaleClassName($locale);
         $transformer = new $localeClassName();

@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Polish\PolishDictionary;
 use NumberToWords\Language\Polish\PolishNounGenderInflector;
 use NumberToWords\Language\Polish\PolishExponentInflector;
@@ -10,7 +11,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class PolishNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new PolishDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

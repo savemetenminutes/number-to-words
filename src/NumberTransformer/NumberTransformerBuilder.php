@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
 use NumberToWords\Language\Dictionary;
 use NumberToWords\Language\ExponentGetter;
 use NumberToWords\Language\ExponentInflector;
@@ -13,9 +14,9 @@ class NumberTransformerBuilder
 {
     private NumberTransformer $numberTransformer;
 
-    public function __construct()
+    public function __construct(ArithmeticProcessor $arithmeticProcessor)
     {
-        $this->numberTransformer = new GenericNumberTransformer();
+        $this->numberTransformer = new GenericNumberTransformer($arithmeticProcessor);
     }
 
     public function withDictionary(Dictionary $dictionary): self

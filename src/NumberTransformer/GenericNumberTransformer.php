@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
 use NumberToWords\Language\Dictionary;
 use NumberToWords\Language\ExponentGetter;
 use NumberToWords\Language\ExponentInflector;
@@ -11,6 +12,7 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class GenericNumberTransformer implements NumberTransformer
 {
+    private ArithmeticProcessor $arithmeticProcessor;
     private Dictionary $dictionary;
     private ?TripletTransformer $tripletTransformer;
     private ?PowerAwareTripletTransformer $powerAwareTripletTransformer;
@@ -20,18 +22,26 @@ class GenericNumberTransformer implements NumberTransformer
     private ?string $wordsSeparator = null;
     private ?string $exponentSeparator = null;
 
-    public function toWords(int $number): string
+    public function __construct(ArithmeticProcessor $arithmeticProcessor)
     {
-        if ($number === 0) {
+        $this->arithmeticProcessor = $arithmeticProcessor;
+    }
+
+    /**
+     * @param string|float|int $number
+     */
+    public function toWords($number): string
+    {
+        if ($this->arithmeticProcessor->comp($number, 0) === 0) {
             return $this->dictionary->getZero();
         }
 
         $words = [];
         $minus = '';
 
-        if ($number < 0) {
+        if ($this->arithmeticProcessor->comp($number, 0) === -1) {
             $minus = $this->dictionary->getMinus();
-            $number *= -1;
+            $number = $this->arithmeticProcessor->mul($number, -1);
         }
 
         if ($this->tripletTransformer !== null || $this->powerAwareTripletTransformer !== null) {
@@ -41,13 +51,13 @@ class GenericNumberTransformer implements NumberTransformer
         return trim(sprintf('%s %s', $minus, implode($this->wordsSeparator, $words)));
     }
 
-    private function getWordsBySplittingIntoTriplets(int $number): array
+    private function getWordsBySplittingIntoTriplets(string $number): array
     {
         $words = [];
         $triplets = $this->numberToTripletsConverter->convertToTriplets($number);
 
         foreach ($triplets as $i => $triplet) {
-            if ($triplet > 0) {
+            if ($this->arithmeticProcessor->comp($triplet, 0) === 1) {
                 if ($this->tripletTransformer !== null) {
                     $words[] = $this->tripletTransformer->transformToWords($triplet);
                 }

@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Albanian\AlbanianDictionary;
 use NumberToWords\Language\Albanian\AlbanianExponentGetter;
 use NumberToWords\Language\Albanian\AlbanianTripletTransformer;
@@ -9,7 +10,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class AlbanianNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new AlbanianDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();
