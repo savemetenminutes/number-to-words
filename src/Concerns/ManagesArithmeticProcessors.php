@@ -21,14 +21,20 @@ trait ManagesArithmeticProcessors
             throw new \RuntimeException('Value must be of type string|float|int.');
         }
 
+        $resolvedOptions = array_replace_recursive(
+            ManagesArithmeticProcessorsInterface::DEFAULT_OPTIONS,
+            $options
+        );
+
         /**
          * Sort the options by key to avoid initializing an arithmetic processor with the same, but rearranged options
          */
-        ksort($options);
-        $optionsHash = hash('sha256', serialize($options));
+        ksort($resolvedOptions);
+        $optionsHash = hash('sha256', serialize($resolvedOptions));
 
         switch (true) {
-            case extension_loaded('bcmath') && !($options['useNativeOperands'] ?? false):
+            case extension_loaded('bcmath')
+                && !($options[ManagesArithmeticProcessorsInterface::OPTION_NAME_USE_NATIVE_OPERANDS]):
                 if (isset($this->arithmeticProcessors['string']['bcmath'][$optionsHash])) {
                     return $this->arithmeticProcessors['string']['bcmath'][$optionsHash];
                 }
@@ -37,7 +43,8 @@ trait ManagesArithmeticProcessors
                     $this->arithmeticProcessors['string']['bcmath'][$optionsHash] =
                         new BCMathEnabledArithmeticProcessor(
                             new BCMathEnabledCastValueAdapter(
-                                $options['floatingPointPrecision'] ?? null
+                                $resolvedOptions
+                                    [ManagesArithmeticProcessorsInterface::OPTION_NAME_FLOATING_POINT_PRECISION]
                             )
                         );
             default:
@@ -48,7 +55,10 @@ trait ManagesArithmeticProcessors
                 return
                     $this->arithmeticProcessors['int'][$optionsHash] =
                         new BuiltInOperandsArithmeticProcessor(
-                            new SimpleCastValueAdapter($options['floatingPointPrecision'] ?? null)
+                            new SimpleCastValueAdapter(
+                                $resolvedOptions
+                                    [ManagesArithmeticProcessorsInterface::OPTION_NAME_FLOATING_POINT_PRECISION]
+                            )
                         );
         }
     }
