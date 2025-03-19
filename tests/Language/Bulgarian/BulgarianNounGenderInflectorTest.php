@@ -23,8 +23,7 @@ class BulgarianNounGenderInflectorTest extends TestCase
     /**
      * @dataProvider providerItInflectsThousandsByNumbers
      */
-
-    public function providerItInflectsNounsByNumbers(): array
+    public static function providerItInflectsNounsByNumbers(): array
     {
         return [
             [1, 'лев'],

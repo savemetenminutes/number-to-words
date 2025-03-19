@@ -13,7 +13,7 @@ class LatvianTripletTransformer implements TripletTransformer
         $this->dictionary = $latvianDictionary;
     }
 
-    public function transformToWords(int $number): string
+    public function transformToWords(string $number): string
     {
         $units = $number % 10;
         $tens = (int) ($number / 10) % 10;

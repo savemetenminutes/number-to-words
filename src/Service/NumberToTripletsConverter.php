@@ -2,15 +2,27 @@
 
 namespace NumberToWords\Service;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
+
 class NumberToTripletsConverter
 {
-    public function convertToTriplets(int $number): array
+    protected ArithmeticProcessor $arithmeticProcessor;
+
+    public function __construct(ArithmeticProcessor $arithmeticProcessor)
+    {
+        $this->arithmeticProcessor = $arithmeticProcessor;
+    }
+
+    /**
+     * @param string|float|int $number
+     */
+    public function convertToTriplets($number): array
     {
         $triplets = [];
 
-        while ($number > 0) {
-            $triplets[] = $number % 1000;
-            $number = (int) ($number / 1000);
+        while ($this->arithmeticProcessor->comp($number, 0) === 1) {
+            $triplets[] = $this->arithmeticProcessor->floor($this->arithmeticProcessor->mod($number, 1000));
+            $number = $this->arithmeticProcessor->floor($this->arithmeticProcessor->div($number, 1000));
         }
 
         return array_reverse($triplets);

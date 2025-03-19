@@ -292,7 +292,7 @@ class Bg extends Words
     {
         $ret = [];
 
-        $ret_minus = '';
+        $retMinus = '';
 
         // check if $num is a valid non-zero number
         if (!$num || preg_match('/^-?0+$/', $num) || !preg_match('/^-?\d+$/', $num)) {
@@ -310,39 +310,39 @@ class Bg extends Words
         $num = ltrim($num, '0');
 
         // split $num to groups of three-digit numbers
-        $num_groups = $this->splitNumber($num);
+        $numGroups = $this->splitNumber($num);
 
-        $sizeof_numgroups = count($num_groups);
+        $sizeOfNumGroups = count($numGroups);
 
         // go through the groups in reverse order, so that the last group could be determined
-        for ($i = $sizeof_numgroups - 1, $j = 1; $i >= 0; $i--, $j++) {
+        for ($i = $sizeOfNumGroups - 1, $j = 1; $i >= 0; $i--, $j++) {
             if (!isset($ret[$j])) {
                 $ret[$j] = '';
             }
 
             // what is the corresponding exponent for the current group
-            $pow = $sizeof_numgroups - $i;
+            $pow = $sizeOfNumGroups - $i;
 
-            // skip processment for empty groups
-            if ($num_groups[$i] != '000') {
-                if ($num_groups[$i] > 1) {
+            // skip processing for empty groups
+            if ($numGroups[$i] != '000') {
+                if ($numGroups[$i] > 1) {
                     if ($pow == 1) {
                         $ret[$j] .= $this->showDigitsGroup(
-                                $num_groups[$i],
+                                $numGroups[$i],
                                 0,
                                 !$this->lastAnd && $i
                             ) . $this->wordSeparator;
                         $ret[$j] .= self::$exponent[($pow - 1) * 3];
                     } elseif ($pow == 2) {
                         $ret[$j] .= $this->showDigitsGroup(
-                                $num_groups[$i],
+                                $numGroups[$i],
                                 -1,
                                 !$this->lastAnd && $i
                             ) . $this->wordSeparator;
                         $ret[$j] .= self::$miscStrings['hiliadi'] . $this->wordSeparator;
                     } else {
                         $ret[$j] .= $this->showDigitsGroup(
-                                $num_groups[$i],
+                                $numGroups[$i],
                                 1,
                                 !$this->lastAnd && $i
                             ) . $this->wordSeparator;
@@ -351,7 +351,7 @@ class Bg extends Words
                 } else {
                     if ($pow == 1) {
                         $ret[$j] .= $this->showDigitsGroup(
-                                $num_groups[$i],
+                                $numGroups[$i],
                                 0,
                                 !$this->lastAnd && $i
                             ) . $this->wordSeparator;
@@ -364,6 +364,6 @@ class Bg extends Words
             }
         }
 
-        return $ret_minus . rtrim(implode('', array_reverse($ret)), $this->wordSeparator);
+        return $retMinus . rtrim(implode('', array_reverse($ret)), $this->wordSeparator);
     }
 }
