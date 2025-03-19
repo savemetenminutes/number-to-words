@@ -17,7 +17,7 @@ class BuiltInOperandsArithmeticProcessor extends AbstractArithmeticProcessor
      */
     public function getTens($value)
     {
-        return ($value / 10) % 10;
+        return (int)($value / 10) % 10;
     }
 
     /**
@@ -25,7 +25,7 @@ class BuiltInOperandsArithmeticProcessor extends AbstractArithmeticProcessor
      */
     public function getHundreds($value)
     {
-        return ($value / 100) % 10;
+        return (int)($value / 100) % 10;
     }
 
     /**
@@ -44,7 +44,7 @@ class BuiltInOperandsArithmeticProcessor extends AbstractArithmeticProcessor
         switch (true) {
             case $value0 < $value1:
                 return -1;
-            case $value0 === $value1:
+            case $value0 == $value1:
                 return 0;
             default:
                 return 1;

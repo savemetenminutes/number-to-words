@@ -25,6 +25,33 @@ class BulgarianCurrencyTransformerTest extends CurrencyTransformerTest
             [54599, 'BGN', 'петстотин четиридесет и пет лева и деветдесет и девет стотинки'],
             [304501, 'BGN', 'три хиляди четиридесет и пет лева и една стотинка'],
             [304501, 'BGN', 'три хиляди четиридесет и пет лева и една стотинка'],
+            [
+                /**
+                 * With \NumberToWords\ArithmeticProcessor\BCMathEnabledArithmeticProcessor
+                 * there is no loss of precision
+                 */
+                '82987394829012101.01',
+                'BGN',
+                'осемдесет и два квадрилиона'
+                    . ' деветстотин осемдесет и седем трилиона'
+                    . ' триста деветдесет и четири милиарда'
+                    . ' осемстотин двадесет и девет милиона'
+                    . ' дванадесет хиляди сто и един лева'
+                    . ' и една стотинка',
+
+                /**
+                 * With \NumberToWords\ArithmeticProcessor\BuiltInOperandsArithmeticProcessor
+                 * there is loss of precision in the last five orders of the value
+                 */
+                //'82987394829012101.01',
+                //'BGN',
+                //'осемдесет и два квадрилиона'
+                //    . ' деветстотин осемдесет и седем трилиона'
+                //    . ' триста деветдесет и четири милиарда'
+                //    . ' осемстотин двадесет и девет милиона'
+                //    . ' дванадесет хиляди лева'
+                //    . ' и дванадесет стотинки',
+            ],
         ];
     }
 }
