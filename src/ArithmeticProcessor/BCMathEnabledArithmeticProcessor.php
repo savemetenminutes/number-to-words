@@ -220,8 +220,11 @@ class BCMathEnabledArithmeticProcessor extends AbstractArithmeticProcessor
                 ($number[0] === '-')
                     ? bcsub($number, $diff, $precision)
                     : bcadd($number, $diff, $precision);
-            $result = rtrim($result, '0');
-            $result = rtrim($result, '.');
+
+            if (str_contains($result, '.')) {
+                $result = rtrim($result, '0');
+                $result = rtrim($result, '.');
+            }
         }
 
         return $result;
