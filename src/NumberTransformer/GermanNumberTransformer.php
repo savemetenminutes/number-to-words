@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\German\GermanDictionary;
 use NumberToWords\Language\German\GermanExponentInflector;
 use NumberToWords\Language\German\GermanTripletTransformer;
@@ -9,7 +10,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class GermanNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new GermanDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

@@ -9,6 +9,7 @@ use NumberToWords\NumberTransformer\NumberTransformer;
 
 trait ManagesNumberTransformers
 {
+    use ManagesArithmeticProcessors;
     use ManagesLocaleAlias;
 
     private array $numberTransformers = [
@@ -70,11 +71,18 @@ trait ManagesNumberTransformers
      * @throws NumberToWordsException
      * @throws InvalidArgumentException
      */
-    public static function transformNumber(string $language, int $number): string
-    {
+    public static function transformNumber(
+        string $language,
+        $number,
+        array $options = []
+    ): string {
         $static = new static();
         $language = $static->resolveAlias($language);
+        $arithmeticProcessor = $static->getArithmeticProcessor($number, $options);
 
-        return $static->getNumberTransformer($language)->toWords($number);
+        return
+            $static
+                ->getNumberTransformer($language)
+                ->toWords($number, $arithmeticProcessor);
     }
 }

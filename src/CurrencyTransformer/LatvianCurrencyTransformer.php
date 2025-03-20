@@ -7,9 +7,14 @@ use NumberToWords\Language\Latvian\LatvianDictionary;
 use NumberToWords\NumberTransformer\LatvianNumberTransformer;
 use NumberToWords\TransformerOptions\CurrencyTransformerOptions;
 
-class LatvianCurrencyTransformer implements CurrencyTransformer
+class LatvianCurrencyTransformer extends AbstractCurrencyTransformer
 {
-    public function toWords(int $amount, string $currency, ?CurrencyTransformerOptions $options = null): string
+    /**
+     * @param string|float|int $amount
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($amount, string $currency, ?CurrencyTransformerOptions $options = null): string
     {
         $dictionary = new LatvianDictionary();
         $numberTransformer = new LatvianNumberTransformer();

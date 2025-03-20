@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Serbian\SerbianDictionary;
 use NumberToWords\Language\Serbian\SerbianExponentInflector;
 use NumberToWords\Language\Serbian\SerbianNounGenderInflector;
@@ -10,7 +11,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class SerbianNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new SerbianDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

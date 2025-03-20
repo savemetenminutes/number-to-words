@@ -8,7 +8,13 @@ use NumberToWords\TransformerOptions\CurrencyTransformerOptions;
 interface CurrencyTransformer
 {
     /**
+     * @param string|float|int $amount
+     *
      * @throws NumberToWordsException
      */
-    public function toWords(int $amount, string $currency, ?CurrencyTransformerOptions $options = null): string;
+    public function toWords(
+        $amount,
+        string $currency,
+        ?CurrencyTransformerOptions $options = null
+    ): string;
 }

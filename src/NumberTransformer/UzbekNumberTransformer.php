@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Uzbek\UzbekDictionary;
 use NumberToWords\Language\Uzbek\UzbekExponentGetter;
 use NumberToWords\Language\Uzbek\UzbekTripletTransformer;
@@ -9,7 +10,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class UzbekNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new UzbekDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();
