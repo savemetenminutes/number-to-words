@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Slovak\SlovakDictionary;
 use NumberToWords\Language\Slovak\SlovakNounGenderInflector;
 use NumberToWords\Language\Slovak\SlovakExponentInflector;
@@ -10,7 +11,12 @@ use NumberToWords\Service\NumberToTripletsConverter;
 
 class SlovakNumberTransformer implements NumberTransformer
 {
-    public function toWords(int $number): string
+    /**
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
+     */
+    public function toWords($number): string
     {
         $dictionary = new SlovakDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

@@ -13,7 +13,7 @@ class PolishTripletTransformer implements TripletTransformer
         $this->polishDictionary = $polishDictionary;
     }
 
-    public function transformToWords(int $number): string
+    public function transformToWords(string $number): string
     {
         $units = $number % 10;
         $tens = (int) ($number / 10) % 10;

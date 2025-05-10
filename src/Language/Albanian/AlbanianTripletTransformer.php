@@ -13,7 +13,7 @@ class AlbanianTripletTransformer implements TripletTransformer
         $this->dictionary = $dictionary;
     }
 
-    public function transformToWords(int $number): string
+    public function transformToWords(string $number): string
     {
         $units = $number % 10;
         $tens = (int) ($number / 10) % 10;

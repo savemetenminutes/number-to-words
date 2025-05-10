@@ -1080,7 +1080,7 @@ class BulgarianDictionary implements Dictionary
         return static::ARITHMETIC_MINUS;
     }
 
-    public function getCorrespondingUnit(int $unit): string
+    public function getCorrespondingUnit($unit): string
     {
         $result = static::ENUMERATIONS[static::ENUMERATION_BY_VALUE][$unit];
 
@@ -1091,7 +1091,7 @@ class BulgarianDictionary implements Dictionary
         return $result;
     }
 
-    public function getCorrespondingUnitForGrammaticalGender(int $unit, string $grammaticalGender): string
+    public function getCorrespondingUnitForGrammaticalGender($unit, string $grammaticalGender): string
     {
         $result = static::ENUMERATIONS[static::ENUMERATION_BY_VALUE][$unit];
 
@@ -1102,12 +1102,12 @@ class BulgarianDictionary implements Dictionary
         return $result;
     }
 
-    public function getCorrespondingTeen(int $teen): string
+    public function getCorrespondingTeen($teen): string
     {
         return static::ENUMERATIONS[static::ENUMERATION_BY_VALUE][$teen];
     }
 
-    public function getCorrespondingTen(int $ten): string
+    public function getCorrespondingTen($ten): string
     {
         return static::ENUMERATIONS[static::ENUMERATION_BY_VALUE][$ten];
     }

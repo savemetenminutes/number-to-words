@@ -2,6 +2,7 @@
 
 namespace NumberToWords\NumberTransformer;
 
+use NumberToWords\Exception\NumberToWordsException;
 use NumberToWords\Language\Arabic\ArabicDictionary;
 use NumberToWords\Language\Arabic\ArabicExponentInflector;
 use NumberToWords\Language\Arabic\ArabicNounGenderInflector;
@@ -11,9 +12,11 @@ use NumberToWords\Service\NumberToTripletsConverter;
 class ArabicNumberTransformer implements NumberTransformer
 {
     /**
-     * @inheritdoc
+     * @param string|float|int $number
+     *
+     * @throws NumberToWordsException
      */
-    public function toWords(int $number): string
+    public function toWords($number): string
     {
         $dictionary = new ArabicDictionary();
         $numberToTripletsConverter = new NumberToTripletsConverter();

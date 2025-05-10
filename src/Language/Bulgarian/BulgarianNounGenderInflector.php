@@ -2,11 +2,23 @@
 
 namespace NumberToWords\Language\Bulgarian;
 
+use NumberToWords\ArithmeticProcessor\ArithmeticProcessor;
+
 class BulgarianNounGenderInflector
 {
-    public function inflectNounByNumber(int $number, string $singular, string $plural, string $genitivePlural): string
+    protected ArithmeticProcessor $arithmeticProcessor;
+
+    public function __construct(ArithmeticProcessor $arithmeticProcessor)
     {
-        if ($number === 1) {
+        $this->arithmeticProcessor = $arithmeticProcessor;
+    }
+
+    /**
+     * @param string|float|int $number
+     */
+    public function inflectNounByNumber($number, string $singular, string $plural, string $genitivePlural): string
+    {
+        if ($this->arithmeticProcessor->comp($number, 1) === 0) {
             return $singular;
         }
 

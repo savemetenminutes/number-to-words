@@ -13,7 +13,7 @@ class SlovakTripletTransformer implements TripletTransformer
         $this->slovakDictionary = $slovakDictionary;
     }
 
-    public function transformToWords(int $number): string
+    public function transformToWords(string $number): string
     {
         $units = $number % 10;
         $tens = (int) ($number / 10) % 10;
