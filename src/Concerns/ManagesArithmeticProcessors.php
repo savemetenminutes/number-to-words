@@ -34,7 +34,7 @@ trait ManagesArithmeticProcessors
 
         switch (true) {
             case extension_loaded('bcmath')
-                && !($options[ManagesArithmeticProcessorsInterface::OPTION_NAME_USE_NATIVE_OPERANDS]):
+                && !($resolvedOptions[ManagesArithmeticProcessorsInterface::OPTION_NAME_USE_NATIVE_OPERANDS]):
                 if (isset($this->arithmeticProcessors['string']['bcmath'][$optionsHash])) {
                     return $this->arithmeticProcessors['string']['bcmath'][$optionsHash];
                 }
